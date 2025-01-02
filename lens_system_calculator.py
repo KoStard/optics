@@ -70,6 +70,7 @@ def process_lens_system(object_height, lenses, gaps):
         print(f"  Object distance (p): {object_distance} cm")
         print(f"  Image distance (q): {image_distance:.2f} cm")
         print(f"  Magnification (M): {magnification:.2f}")
+        print(f"  Cumulative Magnification: {total_magnification:.2f}")
         print(f"  Image height (hi): {image_height:.2f} cm")
         print()
         
