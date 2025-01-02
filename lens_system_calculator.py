@@ -104,13 +104,25 @@ def print_results(results, total_magnification, final_image_position, final_imag
     print(f"  Final Image Position (q_final): {final_image_position:.2f} cm")
     print(f"  Final Image Height (hi_final): {final_image_height:.2f} cm")
 
+def get_magnification_color(magnitude):
+    """Return ANSI color code based on magnification magnitude"""
+    if magnitude < 100:
+        return ""  # No color for small values
+    elif magnitude < 200:
+        return "\033[93m"  # Yellow
+    elif magnitude < 300:
+        return "\033[33m"  # Orange
+    elif magnitude < 400:
+        return "\033[91m"  # Light red
+    else:
+        return "\033[31m"  # Bright red
+
 def print_magnification_2d(object_height, lenses, num_lenses):
     """
     Print a 2D table of total magnification for different object distances and gap sizes.
     Both object distance and gap sizes range from 1 to 40 cm.
     Object Distance is the rows. Gap size is the columns.
     """
-
     gaps_list = [i * 0.05 for i in range(1, 20)]
     distance_list = [i * 0.25 for i in range(1, 30)]
     first_column_width = 6
@@ -130,11 +142,14 @@ def print_magnification_2d(object_height, lenses, num_lenses):
             gaps = [distance] + [gap] * (num_lenses - 1)
             # Process the lens system
             _, total_mag, _, _ = process_lens_system(object_height, lenses, gaps)
+            # Get color based on magnitude
+            color_code = get_magnification_color(abs(total_mag))
+            reset_code = "\033[0m" if color_code else ""
             # Print compact value
             if abs(total_mag) < 1000:
-                print(f"{total_mag:5.0f}", end="")
+                print(f"{color_code}{total_mag:5.0f}{reset_code}", end="")
             else:
-                print("    ∞", end="")
+                print(f"{color_code}    ∞{reset_code}", end="")
         print()
 
 def print_magnification_vs_distance(object_height, lenses, gaps):
