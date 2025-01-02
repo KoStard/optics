@@ -4,6 +4,8 @@ Lens System Calculator
 This script calculates the image position, magnification, and final image height for a system of lenses and gaps.
 It uses the lens formula (1/f = 1/p + 1/q), magnification formula (M = -q/p), and image height formula (M = hi/ho).
 """
+import plotly.graph_objects as go
+import numpy as np
 
 class LensResult:
     """Stores the calculation results for a single lens"""
@@ -123,7 +125,7 @@ def print_magnification_2d(object_height, lenses, num_lenses):
     Both object distance and gap sizes range from 1 to 40 cm.
     Object Distance is the rows. Gap size is the columns.
     """
-    gaps_list = [i * 0.05 for i in range(1, 20)]
+    gaps_list = [i * 0.05 for i in range(10, 30)]
     distance_list = [i * 0.25 for i in range(1, 30)]
     first_column_width = 6
     per_column_width = 5
@@ -163,6 +165,51 @@ def print_magnification_vs_distance(object_height, lenses, gaps):
         _, total_mag, _, _ = process_lens_system(object_height, lenses, modified_gaps)
         print(f"{distance:>19} | {total_mag:>17.2f}")
 
+def plot_interactive_heatmap(object_height, lenses, num_lenses):
+    """
+    Create an interactive heatmap using Plotly showing total magnification
+    for different object distances and gap sizes.
+    """
+    # Create ranges with better granularity
+    gaps_list = np.linspace(0.1, 4, 100)  # 100 points between 0.1 and 40 cm
+    distance_list = np.linspace(0.1, 40, 100)  # 100 points between 0.1 and 40 cm
+    
+    # Create matrix to store results
+    magnification_matrix = np.zeros((len(distance_list), len(gaps_list)))
+    
+    # Calculate values
+    for i, distance in enumerate(distance_list):
+        for j, gap in enumerate(gaps_list):
+            gaps = [distance] + [gap] * (num_lenses - 1)
+            _, total_mag, _, _ = process_lens_system(object_height, lenses, gaps)
+            # Cap very large values for better visualization
+            if abs(total_mag) > 1000:
+                total_mag = 1000 if total_mag > 0 else -1000
+            magnification_matrix[i, j] = total_mag
+    
+    # Create heatmap
+    fig = go.Figure(data=go.Heatmap(
+        z=magnification_matrix,
+        x=gaps_list,
+        y=distance_list,
+        colorscale='RdBu',
+        colorbar=dict(title='Magnification'),
+        zmin=-1000,
+        zmax=1000
+    ))
+    
+    # Add layout
+    fig.update_layout(
+        title='Total Magnification Heatmap',
+        xaxis_title='Gap Size (cm)',
+        yaxis_title='Object Distance (cm)',
+        width=800,
+        height=800
+    )
+    
+    # Show plot
+    fig.show()
+
 # Hardcoded values
 object_height = 10  # Height of the object (ho)
 lenses = [25, 25, 25, 25, 25, 25]  # Focal lengths of the lenses (f)
@@ -171,6 +218,10 @@ gaps = [2, 10, 10, 10, 10, 10]  # Distances between the object and lenses (gaps)
 # Print 2D magnification table
 print("\nMagnification Table (Object Distance vs Gap Size):")
 print_magnification_2d(object_height, lenses, len(lenses))
+
+# Show interactive heatmap
+print("\nGenerating interactive heatmap...")
+plot_interactive_heatmap(object_height, lenses, len(lenses))
 
 # # Print magnification vs distance
 # print("\nMagnification vs Object Distance:")
