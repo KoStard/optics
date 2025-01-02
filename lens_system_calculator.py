@@ -20,13 +20,19 @@ class LensResult:
 def calculate_image_distance(focal_length, object_distance):
     """
     Calculate the image distance (q) using the lens formula: 1/f = 1/p + 1/q.
+    Returns infinity if object distance equals focal length.
     """
+    if object_distance == focal_length:
+        return float('inf')
     return 1 / (1 / focal_length - 1 / object_distance)
 
 def calculate_magnification(image_distance, object_distance):
     """
     Calculate the magnification (M) using the formula: M = -q/p.
+    Returns infinity if image distance is infinite.
     """
+    if image_distance == float('inf'):
+        return float('inf')
     return -image_distance / object_distance
 
 def calculate_image_height(object_height, magnification):
@@ -94,11 +100,26 @@ def print_results(results, total_magnification, final_image_position, final_imag
     print(f"  Final Image Position (q_final): {final_image_position:.2f} cm")
     print(f"  Final Image Height (hi_final): {final_image_height:.2f} cm")
 
+def print_magnification_vs_distance(object_height, lenses, gaps):
+    """Print the overall magnification for different object distances"""
+    print("Object Distance (cm) | Total Magnification")
+    print("---------------------|-------------------")
+    for distance in range(1, 41):
+        # Update the first gap (object distance)
+        modified_gaps = [distance] + gaps[1:]
+        # Process the lens system
+        _, total_mag, _, _ = process_lens_system(object_height, lenses, modified_gaps)
+        print(f"{distance:>19} | {total_mag:>17.2f}")
+
 # Hardcoded values
 object_height = 10  # Height of the object (ho)
 lenses = [25, 25, 25, 25, 25, 25]  # Focal lengths of the lenses (f)
 gaps = [2, 1, 1, 1, 1, 1]  # Distances between the object and lenses (gaps) - first is the object to lense distance, the rest are gaps
 
-# Process and print the lens system results
-results, total_mag, final_pos, final_height = process_lens_system(object_height, lenses, gaps)
-print_results(results, total_mag, final_pos, final_height)
+# Print magnification vs distance
+print_magnification_vs_distance(object_height, lenses, gaps)
+
+# Process and print the lens system results for the original configuration
+# results, total_mag, final_pos, final_height = process_lens_system(object_height, lenses, gaps)
+# print("\nOriginal Configuration Results:")
+# print_results(results, total_mag, final_pos, final_height)
