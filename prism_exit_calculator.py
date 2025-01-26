@@ -14,7 +14,7 @@ AB = BC = AC = 16.5  # Hardcoding for my prism
 n_prism = 1.475
 angle_incident_1 = 30
 angle_refraction_1 = degrees(asin(sin(radians(30)) / n_prism))
-angle_refraction_from_horizontal = 30 - angle_refraction_1
+angle_refraction_1_from_horizontal = 30 - angle_refraction_1
 
 
 h1 = float(input("Enter the h1:"))
@@ -23,16 +23,26 @@ EB = EE1 = BE1 = AB - AE
 
 BH3 = BE1 / 2
 EH3 = EB * sin(radians(60))
-H3O = tan(radians(30 + angle_refraction_from_horizontal)) * EH3
+H3O = tan(radians(30 + angle_refraction_1_from_horizontal)) * EH3
 OC = BC - BH3 - H3O
 h2 = sin(radians(60)) * OC
 
 print(f"Exit point height from base is {h2}")
 
+print()
+
 AH1 = AE / 2
 CH2 = OC / 2
 H1H2 = AC - AH1 - CH2
-
+print(f"Angle of refraction from horizontal is {angle_refraction_1_from_horizontal}")
 print(f"Entry point depth along the horizontal axis: {AH1}")
 print(f"Horizontal distance between the entry and exit points: {H1H2}")
 print(f"Exit point depth along the horizontal axis: {CH2}")
+
+print()
+
+angle_incidence_2 = 90 - (60 - angle_refraction_1_from_horizontal)
+angle_refraction_2 = degrees(asin(
+    sin(radians(angle_incidence_2)) * n_prism
+))
+angle_refraction_2_from_horizontal = angle_refraction_2 - 30
