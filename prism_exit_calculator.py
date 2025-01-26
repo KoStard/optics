@@ -27,22 +27,24 @@ H3O = tan(radians(30 + angle_refraction_1_from_horizontal)) * EH3
 OC = BC - BH3 - H3O
 h2 = sin(radians(60)) * OC
 
-print(f"Exit point height from base is {h2}")
+print("\n=== Primary Ray Path Calculations ===")
+print(f"Exit point height from base: {h2:.2f} cm")
 
-print()
-
+print("\n=== Entry and Exit Point Details ===")
 AH1 = AE / 2
 CH2 = OC / 2
 H1H2 = AC - AH1 - CH2
-print(f"Angle of refraction from horizontal is {angle_refraction_1_from_horizontal}")
-print(f"Entry point depth along the horizontal axis: {AH1}")
-print(f"Horizontal distance between the entry and exit points: {H1H2}")
-print(f"Exit point depth along the horizontal axis: {CH2}")
+print(f"• Angle of refraction from horizontal: {angle_refraction_1_from_horizontal:.2f}°")
+print(f"• Entry point depth along horizontal axis: {AH1:.2f} cm")
+print(f"• Horizontal distance between entry and exit points: {H1H2:.2f} cm")
+print(f"• Exit point depth along horizontal axis: {CH2:.2f} cm")
 
-print()
-
+print("\n=== Secondary Refraction Details ===")
 angle_incidence_2 = 90 - (60 - angle_refraction_1_from_horizontal)
 angle_refraction_2 = degrees(asin(
     sin(radians(angle_incidence_2)) * n_prism
 ))
 angle_refraction_2_from_horizontal = angle_refraction_2 - 30
+print(f"• Angle of incidence at exit face: {angle_incidence_2:.2f}°")
+print(f"• Angle of refraction at exit face: {angle_refraction_2:.2f}°")
+print(f"• Final exit angle from horizontal: {angle_refraction_2_from_horizontal:.2f}°")
