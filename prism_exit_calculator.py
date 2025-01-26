@@ -28,16 +28,16 @@ OC = BC - BH3 - H3O
 h2 = sin(radians(60)) * OC
 
 print("\n=== Primary Ray Path Calculations ===")
-print(f"Exit point height from base: {h2:.2f} cm")
+print(f"Exit point height from base: {h2:.2f} mm")
 
 print("\n=== Entry and Exit Point Details ===")
 AH1 = AE / 2
 CH2 = OC / 2
 H1H2 = AC - AH1 - CH2
 print(f"• Angle of refraction from horizontal: {angle_refraction_1_from_horizontal:.2f}°")
-print(f"• Entry point depth along horizontal axis: {AH1:.2f} cm")
-print(f"• Horizontal distance between entry and exit points: {H1H2:.2f} cm")
-print(f"• Exit point depth along horizontal axis: {CH2:.2f} cm")
+print(f"• Entry point depth along horizontal axis: {AH1:.2f} mm")
+print(f"• Horizontal distance between entry and exit points: {H1H2:.2f} mm")
+print(f"• Exit point depth along horizontal axis: {CH2:.2f} mm")
 
 print("\n=== Secondary Refraction Details ===")
 angle_incidence_2 = 90 - (60 - angle_refraction_1_from_horizontal)
